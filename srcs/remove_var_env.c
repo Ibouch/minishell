@@ -34,7 +34,7 @@ static t_bool	check_first_var(t_env **env, char *elem)
 void			remove_var_env(t_env **env, char *elem)
 {
 	t_env	*begin;
-	t_env	*prev;
+	t_env	*previous;
 	t_env	*tmp;
 
 	if ((check_first_var(env, elem)) == FALSE)
@@ -48,12 +48,12 @@ void			remove_var_env(t_env **env, char *elem)
 				ft_strdel(&((*env)->str));
 				(*env)->next = NULL;
 				ft_memdel((void **)&(*env));
-				prev->next = tmp;
+				previous->next = tmp;
 				*env = tmp;
 			}
 			else
 			{
-				prev = *env;
+				previous = *env;
 				*env = (*env)->next;
 			}
 		}

@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   determine_prefixe.c                                :+:      :+:    :+:   */
+/*   create_update_cmd.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibouchla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/28 22:38:41 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/03/28 22:38:54 by ibouchla         ###   ########.fr       */
+/*   Created: 2016/04/13 21:30:32 by ibouchla          #+#    #+#             */
+/*   Updated: 2016/04/13 21:30:36 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	determine_prefixe(char	**cmd)
+void	create_update_cmd(t_env **env, char *var, char *value)
 {
-	//char	**a_path;
-	char	*tmp;
+	/*
+	.	LOGNAME
+	.	HOME
+	.	USER
+	.	SHELL
+	.	PWD
+	.	SHLVL
+	*/
+	size_t	var_len;
+	char	*cmd;
 
-	if (cmd != NULL)
-	{
-		//a_path = ft_strsplit()
-		if ((ft_strncmp(*cmd, "/bin/", 5)) != 0)
-		{
-			if ((tmp = ft_strnew(ft_strlen(*cmd))) == NULL)
-				ft_error_system();
-			tmp = ft_strcpy(tmp, *cmd);
-			ft_strdel(&(*cmd));
-			*cmd = ft_strjoin("/bin/", tmp);
-			ft_strdel(&(tmp));
-		}
-	}
+	var_len = ft_strlen(var);
+	if ((cmd = ft_strnew(7 + (var_len + ft_strlen(value)))) == NULL)
+		ft_error_system();
+	cmd = ft_strcpy(cmd, "setenv ");
+	ft_strcpy((cmd + 7), var);
+	ft_strcpy((cmd + (7 + var_len)), value);
+//	ft_strcolor_fd(cmd, H_GREEN, 1, 1);
+	builtin_setenv(env, cmd);
 }

@@ -22,14 +22,18 @@ SRC_NAME =	main.c \
 			env_addback.c \
 			storage_all_cmds.c \
 			determine_builtins.c \
+			determine_prefixe.c \
 			search_env_element.c \
 			builtin_env.c \
 			builtin_setenv.c \
 			builtin_get_or_unset.c \
 			remove_var_env.c \
+			get_value_env.c \
 			storage_elem.c \
 			print_setenv_usage.c \
-			builtin_help.c
+			builtin_help.c \
+			update_var_environment.c \
+			create_update_cmd.c
 
 CC_FLAGS = clang -Wall -Wextra -Werror
 

@@ -46,9 +46,12 @@ void		run_shell(t_shell *sh)
 		id = (-1);
 		while (sh->all_cmd[++id] != NULL)
 		{
+			update_var_environment(&(sh->env));
 			if ((determine_builtins(sh, sh->all_cmd[id])) == 1)
 				continue ;
-			/*if ((sh->opt = ft_strsplit(sh->all_cmd[id], ' ')) == NULL)
+			// else if : determine_binary
+			// else : print unknow cmd
+		/*	if ((sh->opt = ft_strsplit(sh->all_cmd[id], ' ')) == NULL)
 				ft_error_system();
 			determine_prefixe(&(sh->opt[0]));
 			verify_access(sh->all_cmd[id]);
@@ -61,7 +64,8 @@ void		run_shell(t_shell *sh)
 				continue;
 			}
 			del_opt(sh->opt);
-	*/	}
+		*/
+		}
 		//del_all_cmd(sh->all_cmd);
 	}
 }
