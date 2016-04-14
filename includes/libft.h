@@ -6,7 +6,7 @@
 /*   By: ibouchla <ibouchla@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 12:47:12 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/03/15 01:04:33 by ibouchla         ###   ########.fr       */
+/*   Updated: 2016/04/14 22:28:54 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void				ft_strcolor_fd(char *s, char *color, int fd, t_bool endl);
 size_t				ft_size_tab(char **tab);
 void				ft_error_system(void);
 void				ft_print_tab(char **tab, int fd);
+void				ft_tabdel(char **tab);
 void				ft_print_lst(t_list *lst, int fd);
 t_list				*ft_lstnew(void const *content, size_t content_size);
 t_list				*ft_lst_at(t_list *begin_lst, unsigned int id);

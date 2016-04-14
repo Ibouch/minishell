@@ -6,7 +6,7 @@
 #    By: ibouchla <ibouchla@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/12/17 12:21:30 by ibouchla          #+#    #+#              #
-#    Updated: 2016/03/12 23:48:12 by ibouchla         ###   ########.fr        #
+#    Updated: 2016/04/14 22:29:55 by ibouchla         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,6 +94,7 @@ SRC_NAME =	ft_bzero.c \
 		ft_strcolor_fd.c \
 		ft_size_tab.c \
 		ft_print_tab.c \
+		ft_tabdel.c \
 		get_next_line.c
 
 CREATE_LIB = ar rc $(NAME) $(OBJET)

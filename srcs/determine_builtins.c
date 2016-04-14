@@ -19,9 +19,14 @@ int	determine_builtins(t_shell *sh, char *cmd)
 		builtin_help();
 		return (1);
 	}
-	else if ((ft_strcmp(cmd, "env")) == 0)
+	else if ((ft_strncmp(cmd, "env", 3)) == 0)
 	{
-		builtin_env(sh->env);
+		if (cmd[3] == ' ')
+			builtin_env(sh->env, cmd);
+		else if (cmd[3] == '\0')
+			print_environment(sh->env);
+		else
+			return (0);
 		return (1);
 	}
 	else if ((ft_strncmp(cmd, "getenv", 6)) == 0)
@@ -29,7 +34,7 @@ int	determine_builtins(t_shell *sh, char *cmd)
 		if (cmd[6] == ' ')
 			builtin_get_or_unset(&(sh->env), cmd, 6, &get_value_env);
 		else if (cmd[6] == '\0')
-			builtin_env(sh->env);
+			print_environment(sh->env);
 		else
 			return (0);
 		return(1);
@@ -39,7 +44,7 @@ int	determine_builtins(t_shell *sh, char *cmd)
 		if (cmd[6] == ' ')
 			builtin_setenv(&(sh->env), cmd);
 		else if (cmd[6] == '\0')
-			builtin_env(sh->env);
+			print_environment(sh->env);
 		else
 			return (0);
 		return (1);
@@ -49,7 +54,7 @@ int	determine_builtins(t_shell *sh, char *cmd)
 		if (cmd[8] == ' ')
 			builtin_get_or_unset(&(sh->env), cmd, 8, &remove_var_env);
 		else if (cmd[8] == '\0')
-			builtin_env(sh->env);
+			print_environment(sh->env);
 		else
 			return (0);
 		return (1);

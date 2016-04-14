@@ -112,5 +112,6 @@ void		builtin_setenv(t_env **env, char *cmd)
 	ft_strdel(&(tab[0]));
 	if (tab[1] != NULL)
 		ft_strdel(&(tab[1]));
-	*env = begin;
+	if (begin != NULL)
+		*env = begin;
 }

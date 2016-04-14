@@ -15,6 +15,7 @@
 # include <libft.h>
 # include <get_next_line.h>
 # include <limits.h>
+# include <sys/wait.h>
 
 typedef struct		s_env
 {
@@ -34,18 +35,21 @@ void				run_shell(t_shell *sh);
 void				env_addback(t_env **alst, char *new_elem);
 t_bool				search_env_element(t_env *env, char *elem);
 int					determine_builtins(t_shell *sh, char *cmd);
-void				determine_prefixe(char	**cmd);
-void				storage_all_cmds(t_shell *sh, char *cmd);
-void				storage_elem(char **str);
-void				builtin_env(t_env *env);
+//void				determine_prefixe(char	**cmd);
+//void				storage_all_cmds(t_shell *sh, char *cmd);
+//void				storage_elem(char **str);
+void				builtin_env(t_env *env, char *cmd);
 void				builtin_setenv(t_env **env, char *cmd);
 void				builtin_get_or_unset(t_env **env, char *cmd, int len,
 					void f_builtin(t_env **, char *));
 void				remove_var_env(t_env **env, char *elem);
 void				print_setenv_usage(void);
+//void				print_env_usage(char c);
+void				print_environment(t_env *env);
 void				get_value_env(t_env **env, char *elem);
 void				builtin_help(void);
 void				update_var_environment(t_env **env);
 void				create_update_cmd(t_env **env, char *var, char *value);
+char				**list_to_tab(t_env *env);
 
 #endif
