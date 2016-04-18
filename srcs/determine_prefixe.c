@@ -12,22 +12,74 @@
 
 #include <minishell.h>
 
-void	determine_prefixe(char	**cmd)
+static int	check_access_right(char *path, char **cmd)
 {
-	//char	**a_path;
 	char	*tmp;
 
-	if (cmd != NULL)
+	if ((tmp = ft_strnew(ft_strlen(path) + ft_strlen(*cmd) + 1)) == NULL)
+		ft_error_system();
+	tmp = ft_strcpy(tmp, path);
+	ft_strcat(tmp, "/");
+	ft_strcat(tmp, *cmd);
+	if ((access(tmp, F_OK)) == 0)
 	{
-		//a_path = ft_strsplit()
-		if ((ft_strncmp(*cmd, "/bin/", 5)) != 0)
+		ft_strdel(cmd);
+		*cmd = ft_strdup(tmp);
+		ft_strdel(&tmp);
+		return (1);
+	}
+	ft_strdel(&tmp);
+	return (0);
+}
+
+static char	*get_value(t_env *env, char *elem)
+{
+	size_t	i;
+	char	*value;
+
+	i = 0;
+	while (env != NULL)
+	{
+		if ((ft_strncmp(env->str, elem, ft_strlen(elem))) == 0)
 		{
-			if ((tmp = ft_strnew(ft_strlen(*cmd))) == NULL)
-				ft_error_system();
-			tmp = ft_strcpy(tmp, *cmd);
-			ft_strdel(&(*cmd));
-			*cmd = ft_strjoin("/bin/", tmp);
-			ft_strdel(&(tmp));
+			value = env->str;
+			while (value[i] != '=' && value[i] != '\0')
+				++i;
+			if (ft_strlen(value) > (i + 1))
+				return ((value + (++i)));
+			else
+				ft_strcolor_fd("An error has occured.", B_RED, 2, TRUE);
+		}
+		env = env->next;
+	}
+	return ((char *)NULL);
+}
+
+int			determine_prefixe(t_env *env, char **cmd)
+{
+	char	**all_path;
+	char	*value;
+	int		i;
+
+	if ((access(*cmd, F_OK)) == 0)
+		return (1);
+	if ((search_env_element(env, "PATH=")) == FALSE || cmd == NULL)
+		return (-1);
+	value = get_value(env, "PATH");
+	if ((all_path = ft_strsplit(value, ':')) == NULL)
+		ft_error_system();
+	i = (-1);
+	while (all_path[++i] != NULL)
+	{
+		if ((ft_strncmp(*cmd, all_path[i], ft_strlen(all_path[i]))) != 0)
+		{
+			if ((check_access_right(all_path[i], cmd)) == 1)
+			{
+				ft_tabdel(all_path);
+				return (1);
+			}
 		}
 	}
+	ft_tabdel(all_path);
+	return (0);
 }

@@ -35,7 +35,8 @@ SRC_NAME =	main.c \
 			update_var_environment.c \
 			create_update_cmd.c \
 			list_to_tab.c \
-			print_environment.c
+			print_environment.c \
+			execution_binary.c
 
 CC_FLAGS = clang -Wall -Wextra -Werror
 

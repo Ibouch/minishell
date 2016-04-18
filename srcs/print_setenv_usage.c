@@ -16,5 +16,5 @@ void	print_setenv_usage(void)
 {
 	ft_strcolor_fd("\nIb_Shell: [setenv] error expected.", B_RED, 2, TRUE);
 	ft_strcolor_fd("Usage : ", B_BLUE, 2, FALSE);
-	ft_strcolor_fd("$ setenv <VAR=VALUE> || <VAR VALUE>\n", B_WHITE, 2, TRUE);
+	ft_strcolor_fd("  $ setenv <VAR=VALUE> || <VAR VALUE>\n", B_WHITE, 2, TRUE);
 }

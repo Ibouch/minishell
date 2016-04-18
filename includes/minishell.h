@@ -16,6 +16,9 @@
 # include <get_next_line.h>
 # include <limits.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <pwd.h>
 
 typedef struct		s_env
 {
@@ -27,7 +30,8 @@ typedef struct		s_shell
 {
 	t_env			*env;
 	char			**all_cmd;
-	char			**opt;
+	int				ret;
+	//char			**opt;
 }					t_shell;
 
 void				storage_env(t_shell *sh, char **environ);
@@ -35,9 +39,9 @@ void				run_shell(t_shell *sh);
 void				env_addback(t_env **alst, char *new_elem);
 t_bool				search_env_element(t_env *env, char *elem);
 int					determine_builtins(t_shell *sh, char *cmd);
-//void				determine_prefixe(char	**cmd);
-//void				storage_all_cmds(t_shell *sh, char *cmd);
-//void				storage_elem(char **str);
+int					determine_prefixe(t_env *env, char **cmd);
+void				storage_all_cmds(t_shell *sh, char *cmd);
+void				storage_elem(char **str);
 void				builtin_env(t_env *env, char *cmd);
 void				builtin_setenv(t_env **env, char *cmd);
 void				builtin_get_or_unset(t_env **env, char *cmd, int len,
@@ -48,8 +52,9 @@ void				print_setenv_usage(void);
 void				print_environment(t_env *env);
 void				get_value_env(t_env **env, char *elem);
 void				builtin_help(void);
-void				update_var_environment(t_env **env);
-void				create_update_cmd(t_env **env, char *var, char *value);
+/* a voir */void	update_var_environment(t_env **env);
+/* a voir */void	create_update_cmd(t_env **env, char *var, char *value);
 char				**list_to_tab(t_env *env);
+int					execution_binary(t_env *env, char *cmd);
 
 #endif

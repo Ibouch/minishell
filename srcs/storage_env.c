@@ -12,16 +12,58 @@
 
 #include <minishell.h>
 
+static void	storage_data(char **data, struct passwd *uid)
+{
+	if ((data[0] = ft_strjoin("HOME=", uid->pw_dir)) == NULL)
+		ft_error_system();
+	if ((data[1] = ft_strjoin("USER=", uid->pw_name)) == NULL)
+		ft_error_system();
+	if ((data[2] = ft_strjoin("SHELL=", uid->pw_shell)) == NULL)
+		ft_error_system();
+}
+
+static char	**get_home_and_user(void)
+{
+	struct stat		st;
+	struct passwd	*uid;
+	char			**data;
+
+	if ((lstat("./", &st)) != 0)
+	{
+		ft_strcolor_fd("Error : stat call system has failed", B_RED, 2, TRUE);
+		return (NULL);
+	}
+	if ((data = (char **)malloc(sizeof(char *) * 4)) == NULL)
+		ft_error_system();
+	if ((uid = getpwuid(st.st_uid)) == NULL)
+	{
+		if ((data[0] = ft_strdup("USER=UNKNOWN UID")) == NULL)
+			ft_error_system();
+		if ((data[1] = ft_strdup("HOME=UNKNOWN HOME")) == NULL)
+			ft_error_system();
+		if ((data[2] = ft_strdup("SHELL=UNKNOWN SHELL")) == NULL)
+			ft_error_system();
+	}
+	else
+		storage_data(data, uid);
+	data[3] = NULL;
+	return (data);
+}
+
 static void	create_my_environment(t_shell *sh)
 {
+	char	**data;
+
+	data = get_home_and_user();
 	env_addback(&(sh->env), "PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:\
 /usr/local/munki");
-	env_addback(&(sh->env), "LOGNAME=");
-	env_addback(&(sh->env), "HOME=");
-	env_addback(&(sh->env), "USER=");
-	env_addback(&(sh->env), "SHELL=");
+	env_addback(&(sh->env), ((data != NULL) ? data[0] : "HOME="));
+	env_addback(&(sh->env), ((data != NULL) ? data[1] : "USER="));
+	env_addback(&(sh->env), ((data != NULL) ? data[2] : "SHELL="));
 	env_addback(&(sh->env), "PWD=");
 	env_addback(&(sh->env), "SHLVL=1");
+	if (data != NULL)
+		ft_tabdel(data);
 }
 
 void		storage_env(t_shell *sh, char **environ)

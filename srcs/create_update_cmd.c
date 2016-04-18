@@ -15,10 +15,6 @@
 void	create_update_cmd(t_env **env, char *var, char *value)
 {
 	/*
-	.	LOGNAME
-	.	HOME
-	.	USER
-	.	SHELL
 	.	PWD
 	.	SHLVL
 	*/
@@ -31,6 +27,6 @@ void	create_update_cmd(t_env **env, char *var, char *value)
 	cmd = ft_strcpy(cmd, "setenv ");
 	ft_strcpy((cmd + 7), var);
 	ft_strcpy((cmd + (7 + var_len)), value);
-//	ft_strcolor_fd(cmd, H_GREEN, 1, 1);
 	builtin_setenv(env, cmd);
+	ft_strdel(&cmd);
 }

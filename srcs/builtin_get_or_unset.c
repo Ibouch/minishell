@@ -29,8 +29,8 @@ static void		print_error_get_or_unset(char *error, t_bool update)
 	ft_strcolor_fd(((update == FALSE) ? error : tmp), B_WHITE, 2, FALSE);
 	ft_strcolor_fd(" unknown name or pattern.", B_RED, 2, TRUE);
 	ft_strcolor_fd("Usage : ", B_BLUE, 2, FALSE);
-	ft_strcolor_fd("$ unsetenv <NAME> || <PATTERN>", B_WHITE, 2, TRUE);
-	ft_strcolor_fd("\t$ getenv   <NAME>\n", B_WHITE, 2, TRUE);
+	ft_strcolor_fd("  $ unsetenv <NAME> || <PATTERN>", B_WHITE, 2, TRUE);
+	ft_strcolor_fd("\t  $ getenv   <NAME>\n", B_WHITE, 2, TRUE);
 	if (update == TRUE)
 		ft_strdel(&tmp);
 }
@@ -67,7 +67,7 @@ void			builtin_get_or_unset(t_env **env, char *cmd, int len,
 		++i;
 	if ((elem = ft_strsub(cmd, i, (ft_strlen(cmd) - len))) == NULL)
 		ft_error_system();
-	ft_strdel(&cmd);
+	//ft_strdel(&cmd);
 	has_update = check_update_cmd(&elem);
 	if ((search_env_element(*env, elem)) == TRUE)
 		f_builtin(env, elem);

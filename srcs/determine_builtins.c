@@ -22,7 +22,7 @@ int	determine_builtins(t_shell *sh, char *cmd)
 	else if ((ft_strncmp(cmd, "env", 3)) == 0)
 	{
 		if (cmd[3] == ' ')
-			builtin_env(sh->env, cmd);
+			execution_binary(sh->env, cmd);
 		else if (cmd[3] == '\0')
 			print_environment(sh->env);
 		else
@@ -59,8 +59,14 @@ int	determine_builtins(t_shell *sh, char *cmd)
 			return (0);
 		return (1);
 	}
-	else if ((ft_strcmp(cmd, "exit")) == 0)
-		exit(EXIT_SUCCESS);
+	else if ((ft_strncmp(cmd, "exit", 4)) == 0)
+	{
+		if (cmd[4] == ' ')
+			;//builtin_exit(cmd);
+		else
+			exit(EXIT_SUCCESS);
+		return (1);
+	}
 	else
 		return (0);
 }

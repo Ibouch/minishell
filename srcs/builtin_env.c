@@ -36,13 +36,11 @@ static int	analyse_cmd(char *cmd)
 
 void		builtin_env(t_env *env, char *cmd)
 {
-	char	**tab_env;
-	char	**option;
+	char *env_cmd;
 
-	if ((option = ft_strsplit(cmd, ' ')) == NULL)
+	if ((env_cmd = ft_strjoin("/usr/bin/", cmd)) == NULL)
 		ft_error_system();
-	tab_env = list_to_tab(env);
-	if ((execve("/usr/bin/env", option, tab_env)) == (-1))
-		
-	ft_tabdel(tab_env);
+	//verify_access("/usr/bin/env");
+	execution_binary(env, env_cmd);
+	ft_strdel(&env_cmd);
 }
