@@ -32,29 +32,6 @@ static int	check_access_right(char *path, char **cmd)
 	return (0);
 }
 
-static char	*get_value(t_env *env, char *elem)
-{
-	size_t	i;
-	char	*value;
-
-	i = 0;
-	while (env != NULL)
-	{
-		if ((ft_strncmp(env->str, elem, ft_strlen(elem))) == 0)
-		{
-			value = env->str;
-			while (value[i] != '=' && value[i] != '\0')
-				++i;
-			if (ft_strlen(value) > (i + 1))
-				return ((value + (++i)));
-			else
-				ft_strcolor_fd("An error has occured.", B_RED, 2, TRUE);
-		}
-		env = env->next;
-	}
-	return ((char *)NULL);
-}
-
 int			determine_prefixe(t_env *env, char **cmd)
 {
 	char	**all_path;

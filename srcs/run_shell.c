@@ -41,7 +41,6 @@ void		run_shell(t_shell *sh)
 		id = (-1);
 		while (sh->all_cmd[++id] != NULL)
 		{
-			update_var_environment(&(sh->env));
 			if ((val = determine_builtins(sh, sh->all_cmd[id])) == 0)
 				val = execution_binary(sh->env, sh->all_cmd[id]);
 			sh->ret = ((sh->ret == 0) ? val : sh->ret);

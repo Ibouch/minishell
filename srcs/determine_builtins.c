@@ -19,6 +19,11 @@ int	determine_builtins(t_shell *sh, char *cmd)
 		builtin_help();
 		return (1);
 	}
+	else if ((ft_strncmp(cmd, "cd", 2)) == 0)
+	{
+		builtin_cd(&(sh->env), cmd);
+		return (1);
+	}
 	else if ((ft_strncmp(cmd, "env", 3)) == 0)
 	{
 		if (cmd[3] == ' ')

@@ -34,5 +34,5 @@ value in its environment.", B_CYAN, 1, TRUE);
 	ft_strcolor_fd("[UNSETENV] : Delete a variable from its environment.",
 	B_CYAN, 1, TRUE);
 	ft_strcolor_fd("\t\t*\t", B_RED, 1, FALSE);
-	ft_strcolor_fd("[EXIT]     : End a process.", B_CYAN, 1, TRUE);
+	ft_strcolor_fd("[EXIT]     : End a process.\n", B_CYAN, 1, TRUE);
 }

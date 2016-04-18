@@ -44,6 +44,8 @@ int			execution_binary(t_env *env, char *cmd)
 	tab_env = list_to_tab(env);
 	if ((arg = ft_strsplit(cmd, ' ')) == NULL)
 		ft_error_system();
+	if (arg[0] == NULL)
+		return (-1);
 	if ((verify_access(env, &arg[0], cmd)) != 1)
 		return (-1);
 	if ((child = fork()) > 0)

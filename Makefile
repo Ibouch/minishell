@@ -24,7 +24,6 @@ SRC_NAME =	main.c \
 			determine_builtins.c \
 			determine_prefixe.c \
 			search_env_element.c \
-			builtin_env.c \
 			builtin_setenv.c \
 			builtin_get_or_unset.c \
 			remove_var_env.c \
@@ -36,7 +35,9 @@ SRC_NAME =	main.c \
 			create_update_cmd.c \
 			list_to_tab.c \
 			print_environment.c \
-			execution_binary.c
+			execution_binary.c \
+			builtin_cd.c \
+			get_value.c
 
 CC_FLAGS = clang -Wall -Wextra -Werror
 

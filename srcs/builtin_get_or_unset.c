@@ -67,7 +67,6 @@ void			builtin_get_or_unset(t_env **env, char *cmd, int len,
 		++i;
 	if ((elem = ft_strsub(cmd, i, (ft_strlen(cmd) - len))) == NULL)
 		ft_error_system();
-	//ft_strdel(&cmd);
 	has_update = check_update_cmd(&elem);
 	if ((search_env_element(*env, elem)) == TRUE)
 		f_builtin(env, elem);
