@@ -14,6 +14,8 @@
 
 static void	run_prompt(int val)
 {
+	if (SIGINT == val)
+		write(1, "\n", 1);
 	ft_strcolor_fd("------------", B_BLACK, 1, TRUE);
 	ft_strcolor_fd("➤  ", ((val == 0) ? B_GREEN : B_RED), 1, FALSE);
 	ft_strcolor_fd("Ib_Shell$ ", B_CYAN, 1, FALSE);
@@ -35,7 +37,9 @@ void		run_shell(t_shell *sh)
 	while (42)
 	{
 		run_prompt(sh->ret);
-		if ((get_next_line(0, &cmd)) == (-1))
+		signal(SIGINT, run_prompt);
+		signal(SIGTSTP, SIG_IGN);
+		if ((sh->rd = (get_next_line(0, &cmd))) == (-1))
 			error_read();
 		storage_all_cmds(sh, cmd);
 		id = (-1);
@@ -46,5 +50,7 @@ void		run_shell(t_shell *sh)
 			sh->ret = ((sh->ret == 0) ? val : sh->ret);
 		}
 		ft_tabdel(sh->all_cmd);
+		if (sh->rd == 0)
+			break ;
 	}
 }

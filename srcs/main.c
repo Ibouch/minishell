@@ -21,4 +21,7 @@ int	main(void)
 		ft_error_system();
 	storage_env(sh, environ);
 	run_shell(sh);
+	free((t_shell *)sh);
+	sh = NULL;
+	return (0);
 }

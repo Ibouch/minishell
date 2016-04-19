@@ -74,7 +74,6 @@ static int	storage_elem_value(char *tab[2], char *cmd)
 		ft_strdel(&tmp);
 		return (-1);
 	}
-	//ft_strdel(&cmd);
 	i = 0;
 	while (((ft_isspace(tmp[i])) == 0 && tmp[i] != '=') && tmp[i] != '\0')
 		++i;

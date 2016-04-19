@@ -28,7 +28,7 @@ char	*get_value(t_env *env, char *elem)
 			if (ft_strlen(value) > (i + 1))
 				return ((value + (++i)));
 			else
-				ft_strcolor_fd("An error has occured.", B_RED, 2, TRUE);
+				return ((char *)NULL);
 		}
 		env = env->next;
 	}

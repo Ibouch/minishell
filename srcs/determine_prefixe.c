@@ -40,9 +40,9 @@ int			determine_prefixe(t_env *env, char **cmd)
 
 	if ((access(*cmd, F_OK)) == 0)
 		return (1);
-	if ((search_env_element(env, "PATH=")) == FALSE || cmd == NULL)
+	if (((search_env_element(env, "PATH=")) == FALSE || cmd == NULL)
+	|| (value = get_value(env, "PATH")) == NULL)
 		return (-1);
-	value = get_value(env, "PATH");
 	if ((all_path = ft_strsplit(value, ':')) == NULL)
 		ft_error_system();
 	i = (-1);

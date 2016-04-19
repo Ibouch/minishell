@@ -26,7 +26,7 @@ static int	check_is_directory(char *dir)
 	}
 	if ((closedir(directory)) == (-1))
 	{
-		ft_strcolor_fd("cd: Can't close directory", H_RED, 2, TRUE);
+		ft_strcolor_fd("cd: Can't close directory.", H_RED, 2, TRUE);
 		return (-1);
 	}
 	return (0);
@@ -58,12 +58,12 @@ static char	*get_home_directory(t_env *env, char *dir)
 	char	*tmp;
 	char	*home;
 
-	if ((search_env_element(env, "HOME=")) == FALSE)
+	if ((search_env_element(env, "HOME=")) == FALSE
+	|| (tmp = get_value(env, "HOME")) == NULL)
 	{
 		ft_strcolor_fd("cd: Home directory was not found.", H_RED, 2, TRUE);
 		return (NULL);
 	}
-	tmp = get_value(env, "HOME");
 	if ((home = ft_strnew(ft_strlen(tmp) + ft_strlen(dir))) == NULL)
 		ft_error_system();
 	home = ft_strcpy(home, tmp);
@@ -101,7 +101,7 @@ void		builtin_cd(t_env **env, char *cmd)
 		if ((ft_size_tab(arg)) == 1)
 			go_change_directory(env, get_value(*env, "HOME"));
 		else if ((ft_size_tab(arg)) > 2)
-			ft_strcolor_fd("cd: Too many arguments", H_RED, 2, TRUE);
+			ft_strcolor_fd("cd: Too many arguments.", H_RED, 2, TRUE);
 		ft_tabdel(arg);
 		return ;
 	}

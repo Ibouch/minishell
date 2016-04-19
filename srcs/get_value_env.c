@@ -30,8 +30,7 @@ void	get_value_env(t_env **env, char *elem)
 			if (ft_strlen(value) > (i + 1))
 				ft_putendl((value + (++i)));
 			else
-				ft_strcolor_fd("Error :\tgetenv has failed or the value is empty",
-				B_RED, 2, TRUE);
+				ft_strcolor_fd("Error :\tThe value is empty.", B_RED, 2, TRUE);
 		}
 		*env = (*env)->next;
 	}

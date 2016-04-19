@@ -17,8 +17,11 @@
 # include <limits.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <signal.h>
 # include <sys/types.h>
 # include <pwd.h>
+
+typedef void		(*sig_t) (int);
 
 typedef struct		s_env
 {
@@ -31,6 +34,7 @@ typedef struct		s_shell
 	t_env			*env;
 	char			**all_cmd;
 	int				ret;
+	int				rd;
 }					t_shell;
 
 void				storage_env(t_shell *sh, char **environ);
