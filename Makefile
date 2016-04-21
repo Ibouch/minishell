@@ -6,7 +6,7 @@
 #    By: ibouchla <ibouchla@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/12/17 12:21:30 by ibouchla          #+#    #+#              #
-#    Updated: 2016/03/26 22:18:32 by ibouchla         ###   ########.fr        #
+#    Updated: 2016/04/19 20:31:33 by ibouchla         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,28 +16,33 @@ INC_PATH = -I includes
 
 SRC_PATH = srcs
 
-SRC_NAME =	main.c \
+SRC_NAME =	builtin_help.c \
+			builtin_cd.c \
+			builtin_setenv.c \
+			builtin_getenv.c \
+			builtin_unsetenv.c \
+			builtin_exit.c \
+			main.c \
 			storage_env.c \
+			auto_shlvl.c \
 			run_shell.c \
 			env_addback.c \
 			storage_all_cmds.c \
 			determine_builtins.c \
 			determine_prefixe.c \
 			search_env_element.c \
-			builtin_setenv.c \
-			builtin_get_or_unset.c \
 			remove_var_env.c \
-			get_value_env.c \
 			storage_elem.c \
 			print_setenv_usage.c \
-			builtin_help.c \
 			update_var_environment.c \
 			create_update_cmd.c \
 			list_to_tab.c \
 			print_environment.c \
-			execution_binary.c \
-			builtin_cd.c \
-			get_value.c
+			exec_bin.c \
+			get_value.c \
+			print_unknown_cmd.c \
+			get_home_directory.c \
+			check_old_dir.c
 
 CC_FLAGS = clang -Wall -Wextra -Werror
 
@@ -62,12 +67,12 @@ all: $(NAME)
 $(NAME): $(OBJET)
 	@echo "$(BLUE)Compilation of object files in project directory is complete.\n"
 	@echo "$(YELLOW)Recompilation of the library in progress.."
-	#@make -C libft/ re > /dev/null LIGNE A DE-COMMENTER /!\
+	@make -C libft/ re > /dev/null
 	@echo "$(BLUE)Compilation of the library is complete.\n"
 	@echo "$(YELLOW)Linkage of object files with the library is in progress.."
 	@$(CC_FLAGS) $(OBJET) $(LD_PATH) $(LD_LIB) -o $(NAME)
 	@echo "$(BLUE)Linkage is complete."
-	#@make -C libft/ fclean LIGNE A DE-COMMENTER /!\
+	@make -C libft/ fclean
 	@echo "$(GREEN)Done."
 
 %.o: %.c

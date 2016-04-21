@@ -41,6 +41,8 @@ static int	check_access_rights(char *dir)
 		ft_strcolor_fd(": No such file or directory.", H_RED, 2, TRUE);
 		return (-1);
 	}
+	if ((check_is_directory(dir)) == (-1))
+		return (-1);
 	if ((access(dir, X_OK)) != 0)
 	{
 		ft_strcolor_fd("cd: ", H_RED, 2, FALSE);
@@ -48,72 +50,70 @@ static int	check_access_rights(char *dir)
 		ft_strcolor_fd(": Permission denied.", H_RED, 2, TRUE);
 		return (-1);
 	}
-	if ((check_is_directory(dir)) == (-1))
-		return (-1);
 	return (0);
 }
 
-static char	*get_home_directory(t_env *env, char *dir)
-{
-	char	*tmp;
-	char	*home;
-
-	if ((search_env_element(env, "HOME=")) == FALSE
-	|| (tmp = get_value(env, "HOME")) == NULL)
-	{
-		ft_strcolor_fd("cd: Home directory was not found.", H_RED, 2, TRUE);
-		return (NULL);
-	}
-	if ((home = ft_strnew(ft_strlen(tmp) + ft_strlen(dir))) == NULL)
-		ft_error_system();
-	home = ft_strcpy(home, tmp);
-	ft_strcat(home, (dir + 1));
-	return (home);
-}
-
-static void	go_change_directory(t_env **env, char *path)
+static int	go_change_dir(t_shell *sh, char *path)
 {
 	if (path == NULL)
 	{
 		ft_strcolor_fd("cd: Can't change directory.", H_RED, 2, TRUE);
-		return ;
+		return (-1);
 	}
 	if ((check_access_rights(path)) == 0)
 	{
 		if ((chdir(path)) != 0)
 		{
 			ft_strcolor_fd("cd: An error has occured.", H_RED, 2, TRUE);
-			return ;
+			return (-1);
 		}
-		update_var_environment(env);
-	}
-}
-
-void		builtin_cd(t_env **env, char *cmd)
-{
-	char	**arg;
-	char	*home;
-
-	if ((arg = ft_strsplit(cmd, ' ')) == NULL)
-		ft_error_system();
-	if ((ft_size_tab(arg)) != 2)
-	{
-		if ((ft_size_tab(arg)) == 1)
-			go_change_directory(env, get_value(*env, "HOME"));
-		else if ((ft_size_tab(arg)) > 2)
-			ft_strcolor_fd("cd: Too many arguments.", H_RED, 2, TRUE);
-		ft_tabdel(arg);
-		return ;
-	}
-	if ((ft_strncmp(arg[1], "~", 1)) == 0)
-	{
-		if ((home = get_home_directory(*env, arg[1])) != NULL)
-		{
-			go_change_directory(env, home);
-			ft_strdel(&home);
-		}
+		sh->ret = update_var_environment(sh);
+		return (sh->ret);
 	}
 	else
-		go_change_directory(env, arg[1]);
+		return (-1);
+}
+
+static int	check_home_dir(t_shell *sh, char *dir)
+{
+	int		ret;
+	char	*home;
+
+	ret = 0;
+	if ((home = get_home_directory(sh->env, dir)) != NULL)
+	{
+		ret = go_change_dir(sh, home);
+		ft_strdel(&home);
+	}
+	else
+		ret = (-1);
+	return (ret);
+}
+
+int			builtin_cd(t_shell *sh, char *cmd)
+{
+	char	**arg;
+	int		i;
+
+	i = 2;
+	while ((ft_isspace(cmd[i])) == 1 && cmd[i] != '\0')
+		++i;
+	if ((arg = ft_strsplit((cmd + i), ' ')) == NULL)
+		ft_error_system();
+	sh->ret = (-1);
+	if ((ft_size_tab(arg)) != 1)
+	{
+		if ((ft_size_tab(arg)) == 0)
+			sh->ret = go_change_dir(sh, get_value(sh->env, "HOME"));
+		else if ((ft_size_tab(arg)) > 1)
+			ft_strcolor_fd("cd: Too many arguments.", H_RED, 2, TRUE);
+		ft_tabdel(arg);
+		return (sh->ret);
+	}
+	if ((ft_strncmp(arg[0], "-", 1)) == 0)
+		check_old_dir(sh->env, &(arg[0]));
+	sh->ret = ((ft_strncmp(arg[0], "~", 1)) == 0) ?
+	check_home_dir(sh, arg[0]) : go_change_dir(sh, arg[0]);
 	ft_tabdel(arg);
+	return (sh->ret);
 }

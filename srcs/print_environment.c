@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-void	print_environment(t_env *env)
+int	print_environment(t_env *env)
 {
 	while (env != NULL)
 	{
@@ -20,4 +20,5 @@ void	print_environment(t_env *env)
 			ft_putendl(env->str);
 		env = env->next;
 	}
+	return (0);
 }

@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_update_cmd.c                                :+:      :+:    :+:   */
+/*   print_unknown_cmd.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibouchla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/04/13 21:30:32 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/04/13 21:30:36 by ibouchla         ###   ########.fr       */
+/*   Created: 2016/04/19 20:30:30 by ibouchla          #+#    #+#             */
+/*   Updated: 2016/04/19 20:31:06 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	create_update_cmd(t_shell *sh, char *var, char *value)
+void	print_unknown_cmd(char *cmd)
 {
-	size_t	var_len;
-	char	*cmd;
-
-	var_len = ft_strlen(var);
-	if ((cmd = ft_strnew(7 + (var_len + ft_strlen(value)))) == NULL)
-		ft_error_system();
-	cmd = ft_strcpy(cmd, "setenv ");
-	ft_strcpy((cmd + 7), var);
-	ft_strcpy((cmd + (7 + var_len)), value);
-	sh->ret = builtin_setenv(sh, cmd);
-	ft_strdel(&cmd);
-	return (sh->ret);
+	ft_strcolor_fd("Ib_Shell : ", B_RED, 2, FALSE);
+	ft_strcolor_fd(cmd, B_WHITE, 2, FALSE);
+	ft_strcolor_fd(" ✖ command unknown or not found.", B_RED, 2, TRUE);
 }

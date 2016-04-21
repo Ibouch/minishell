@@ -12,18 +12,25 @@
 
 #include "minishell.h"
 
-static void	print_error_getcwd(void)
+static int	print_error_getcwd(void)
 {
 	ft_strcolor_fd("Error : getcwd call system has failed.", B_RED, 2, TRUE);
+	return (-1);
 }
 
-void	update_var_environment(t_env **env)
+int			update_var_environment(t_shell *sh)
 {
+	char	*old_pwd;
 	char	*cwd;
 	char	buff[PATH_MAX + 1];
 
+	sh->ret = (-1);
+	if ((search_env_element(sh->env, "PWD=")) == TRUE)
+		if ((old_pwd = get_value(sh->env, "PWD")) != NULL)
+			sh->ret = create_update_cmd(sh, "OLDPWD=", old_pwd);
 	if ((cwd = getcwd(buff, PATH_MAX + 1)) == NULL)
-		print_error_getcwd();
+		sh->ret = print_error_getcwd();
 	else
-		create_update_cmd(env, "PWD=", cwd);
+		sh->ret = create_update_cmd(sh, "PWD=", cwd);
+	return (sh->ret);
 }

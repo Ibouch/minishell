@@ -27,27 +27,34 @@ static void	error_read(void)
 	exit(EXIT_FAILURE);
 }
 
-void		run_shell(t_shell *sh)
+static void	start_shell(t_shell *sh)
 {
 	char	*cmd;
+
+	cmd = NULL;
+	run_prompt(sh->ret);
+	signal(SIGINT, run_prompt);
+	signal(SIGTSTP, SIG_IGN);
+	if ((sh->rd = (get_next_line(0, &cmd))) == (-1))
+		error_read();
+	storage_all_cmds(sh, cmd);
+}
+
+void		run_shell(t_shell *sh)
+{
 	int		val;
 	int		id;
 
-	cmd = NULL;
 	while (42)
 	{
-		run_prompt(sh->ret);
-		signal(SIGINT, run_prompt);
-		signal(SIGTSTP, SIG_IGN);
-		if ((sh->rd = (get_next_line(0, &cmd))) == (-1))
-			error_read();
-		storage_all_cmds(sh, cmd);
+		start_shell(sh);
 		id = (-1);
 		while (sh->all_cmd[++id] != NULL)
 		{
-			if ((val = determine_builtins(sh, sh->all_cmd[id])) == 0)
-				val = execution_binary(sh->env, sh->all_cmd[id]);
-			sh->ret = ((sh->ret == 0) ? val : sh->ret);
+			if ((val = determine_builtins(sh, sh->all_cmd[id])) == 255)
+				if ((val = exec_bin(sh, sh->all_cmd[id])) == -1 || val == 255)
+					print_unknown_cmd(sh->all_cmd[id]);
+			sh->ret = val;
 		}
 		ft_tabdel(sh->all_cmd);
 		if (sh->rd == 0)

@@ -86,31 +86,30 @@ static int	storage_elem_value(char *tab[2], char *cmd)
 	return (0);
 }
 
-void		builtin_setenv(t_env **env, char *cmd)
+int			builtin_setenv(t_shell *sh, char *cmd)
 {
 	char	*tab[2];
 	t_env	*begin;
 
-	if ((storage_elem_value(tab, cmd)) == (-1))
-		return ;
-	if ((check_only_elem(tab[0])) == (-1))
-		return ;
-	begin = *env;
-	if ((search_env_element(*env, tab[0])) == TRUE)
-		while (*env != NULL)
+	if ((ft_strcmp(cmd, "setenv")) == 0)
+		return (print_environment(sh->env));
+	if ((storage_elem_value(tab, cmd)) == -1 || (check_only_elem(tab[0])) == -1)
+		return (-1);
+	begin = sh->env;
+	if ((search_env_element(sh->env, tab[0])) == TRUE)
+		while (sh->env != NULL)
 		{
-			if ((ft_strncmp((*env)->str, tab[0], ft_strlen(tab[0]))) == 0)
+			if ((ft_strncmp(sh->env->str, tab[0], ft_strlen(tab[0]))) == 0)
 			{
-				update_env(&((*env)->str), tab);
+				update_env(&(sh->env->str), tab);
 				break ;
 			}
-			*env = (*env)->next;
+			sh->env = sh->env->next;
 		}
 	else
-		env_addback(env, get_new_env(tab)); // LEAKS > mettre get_new_env dans une variable
+		env_addback(&(sh->env), get_new_env(tab));
 	ft_strdel(&(tab[0]));
-	if (tab[1] != NULL)
-		ft_strdel(&(tab[1]));
-	if (begin != NULL)
-		*env = begin;
+	((tab[1] != NULL) ? ft_strdel(&(tab[1])) : (0));
+	((begin != NULL) ? sh->env = begin : (0));
+	return (0);
 }

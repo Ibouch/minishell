@@ -1,29 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_update_cmd.c                                :+:      :+:    :+:   */
+/*   check_old_dir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibouchla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/04/13 21:30:32 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/04/13 21:30:36 by ibouchla         ###   ########.fr       */
+/*   Created: 2016/04/21 18:32:42 by ibouchla          #+#    #+#             */
+/*   Updated: 2016/04/21 18:32:57 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	create_update_cmd(t_shell *sh, char *var, char *value)
+void	check_old_dir(t_env *env, char **pattern)
 {
-	size_t	var_len;
-	char	*cmd;
+	char	*tmp;
+	char	*old_pwd;
 
-	var_len = ft_strlen(var);
-	if ((cmd = ft_strnew(7 + (var_len + ft_strlen(value)))) == NULL)
+	if ((search_env_element(env, "OLDPWD=")) == FALSE
+	|| (tmp = get_value(env, "OLDPWD")) == NULL)
+	{
+		ft_strcolor_fd("cd:    Old directory was not found.", H_RED, 2, TRUE);
+		return ;
+	}
+	if ((old_pwd = ft_strnew(ft_strlen(tmp) + ft_strlen(*pattern))) == NULL)
 		ft_error_system();
-	cmd = ft_strcpy(cmd, "setenv ");
-	ft_strcpy((cmd + 7), var);
-	ft_strcpy((cmd + (7 + var_len)), value);
-	sh->ret = builtin_setenv(sh, cmd);
-	ft_strdel(&cmd);
-	return (sh->ret);
+	old_pwd = ft_strcpy(old_pwd, tmp);
+	ft_strcat(old_pwd, (*pattern + 1));
+	ft_strdel(pattern);
+	*pattern = old_pwd;
 }

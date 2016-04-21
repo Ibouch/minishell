@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_get_or_unset.c                             :+:      :+:    :+:   */
+/*   builtin_getenv.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibouchla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/04/12 22:23:49 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/04/12 22:23:52 by ibouchla         ###   ########.fr       */
+/*   Created: 2016/04/21 00:20:00 by ibouchla          #+#    #+#             */
+/*   Updated: 2016/04/21 00:20:13 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static void		print_error_get_or_unset(char *error, t_bool update)
+static void		print_getenv_error(char *error, t_bool update)
 {
 	char	*tmp;
 	int		i;
@@ -29,10 +29,32 @@ static void		print_error_get_or_unset(char *error, t_bool update)
 	ft_strcolor_fd(((update == FALSE) ? error : tmp), B_WHITE, 2, FALSE);
 	ft_strcolor_fd(" unknown name or pattern.", B_RED, 2, TRUE);
 	ft_strcolor_fd("Usage : ", B_BLUE, 2, FALSE);
-	ft_strcolor_fd("  $ unsetenv <NAME> || <PATTERN>", B_WHITE, 2, TRUE);
-	ft_strcolor_fd("\t  $ getenv   <NAME>\n", B_WHITE, 2, TRUE);
+	ft_strcolor_fd("  $ getenv <NAME> || <PATTERN>.", B_WHITE, 2, TRUE);
 	if (update == TRUE)
 		ft_strdel(&tmp);
+}
+
+static int		check_value_env(t_shell *sh)
+{
+	char	*value;
+
+	sh->ret = 0;
+	if ((search_env_element(sh->env, sh->elem)) == TRUE)
+	{
+		if ((value = get_value(sh->env, sh->elem)) == NULL)
+		{
+			ft_strcolor_fd("getenv: The value is maybe empty.", H_RED, 2, TRUE);
+			sh->ret = (-1);
+		}
+		else
+			ft_putendl(value);
+	}
+	else
+	{
+		print_getenv_error(sh->elem, sh->has_update);
+		sh->ret = (-1);
+	}
+	return (sh->ret);
 }
 
 static t_bool	check_update_cmd(char **str)
@@ -55,22 +77,20 @@ static t_bool	check_update_cmd(char **str)
 	return (FALSE);
 }
 
-void			builtin_get_or_unset(t_env **env, char *cmd, int len,
-				void f_builtin(t_env **, char *))
+int				builtin_getenv(t_shell *sh, char *cmd)
 {
 	int		i;
-	char	*elem;
-	t_bool	has_update;
 
-	i = len;
+	i = 6;
+	sh->ret = 0;
+	if ((ft_strcmp(cmd, "getenv")) == 0)
+		return (print_environment(sh->env));
 	while ((ft_isspace(cmd[i])) == 1 && cmd[i] != '\0')
 		++i;
-	if ((elem = ft_strsub(cmd, i, (ft_strlen(cmd) - len))) == NULL)
+	if ((sh->elem = ft_strsub(cmd, i, (ft_strlen(cmd) - 6))) == NULL)
 		ft_error_system();
-	has_update = check_update_cmd(&elem);
-	if ((search_env_element(*env, elem)) == TRUE)
-		f_builtin(env, elem);
-	else
-		print_error_get_or_unset(elem, has_update);
-	ft_strdel(&elem);
+	sh->has_update = check_update_cmd(&(sh->elem));
+	check_value_env(sh);
+	ft_strdel(&(sh->elem));
+	return (sh->ret);
 }

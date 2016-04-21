@@ -12,66 +12,38 @@
 
 #include <minishell.h>
 
+static t_built const	g_exec_builtin[6] =
+{
+	{"cd", builtin_cd},
+	{"env", exec_bin},
+	{"getenv", builtin_getenv},
+	{"setenv", builtin_setenv},
+	{"unsetenv", builtin_unsetenv},
+	{"exit", builtin_exit}
+};
+
 int	determine_builtins(t_shell *sh, char *cmd)
 {
+	int		i;
+	size_t	len;
+
 	if ((ft_strcmp(cmd, "help")) == 0 || (ft_strcmp(cmd, "--help")) == 0)
 	{
 		builtin_help();
-		return (1);
-	}
-	else if ((ft_strncmp(cmd, "cd", 2)) == 0)
-	{
-		builtin_cd(&(sh->env), cmd);
-		return (1);
-	}
-	else if ((ft_strncmp(cmd, "env", 3)) == 0)
-	{
-		if (cmd[3] == ' ')
-			execution_binary(sh->env, cmd);
-		else if (cmd[3] == '\0')
-			print_environment(sh->env);
-		else
-			return (0);
-		return (1);
-	}
-	else if ((ft_strncmp(cmd, "getenv", 6)) == 0)
-	{
-		if (cmd[6] == ' ')
-			builtin_get_or_unset(&(sh->env), cmd, 6, &get_value_env);
-		else if (cmd[6] == '\0')
-			print_environment(sh->env);
-		else
-			return (0);
-		return(1);
-	}
-	else if ((ft_strncmp(cmd, "setenv", 6)) == 0)
-	{
-		if (cmd[6] == ' ')
-			builtin_setenv(&(sh->env), cmd);
-		else if (cmd[6] == '\0')
-			print_environment(sh->env);
-		else
-			return (0);
-		return (1);
-	}
-	else if ((ft_strncmp(cmd, "unsetenv", 8)) == 0)
-	{
-		if (cmd[8] == ' ')
-			builtin_get_or_unset(&(sh->env), cmd, 8, &remove_var_env);
-		else if (cmd[8] == '\0')
-			print_environment(sh->env);
-		else
-			return (0);
-		return (1);
-	}
-	else if ((ft_strncmp(cmd, "exit", 4)) == 0)
-	{
-		if (cmd[4] == ' ')
-			;//builtin_exit(cmd);
-		else
-			exit(EXIT_SUCCESS);
-		return (1);
-	}
-	else
 		return (0);
+	}
+	if ((ft_strcmp(cmd, "env")) == 0)
+	{
+		print_environment(sh->env);
+		return (0);
+	}
+	i = 0;
+	while (i < 6)
+	{
+		len = ft_strlen(g_exec_builtin[i].name);
+		if ((ft_strncmp(cmd, g_exec_builtin[i].name, len)) == 0)
+			return (g_exec_builtin[i].f_built(sh, cmd));
+		++i;
+	}
+	return (255);
 }

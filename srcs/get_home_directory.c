@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_update_cmd.c                                :+:      :+:    :+:   */
+/*   get_home_directory.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibouchla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/04/13 21:30:32 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/04/13 21:30:36 by ibouchla         ###   ########.fr       */
+/*   Created: 2016/04/20 17:03:53 by ibouchla          #+#    #+#             */
+/*   Updated: 2016/04/20 17:04:19 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	create_update_cmd(t_shell *sh, char *var, char *value)
+char	*get_home_directory(t_env *env, char *dir)
 {
-	size_t	var_len;
-	char	*cmd;
+	char	*tmp;
+	char	*home;
 
-	var_len = ft_strlen(var);
-	if ((cmd = ft_strnew(7 + (var_len + ft_strlen(value)))) == NULL)
+	if ((search_env_element(env, "HOME=")) == FALSE
+	|| (tmp = get_value(env, "HOME")) == NULL)
+	{
+		ft_strcolor_fd("cd: Home directory was not found.", H_RED, 2, TRUE);
+		return (NULL);
+	}
+	if ((home = ft_strnew(ft_strlen(tmp) + ft_strlen(dir))) == NULL)
 		ft_error_system();
-	cmd = ft_strcpy(cmd, "setenv ");
-	ft_strcpy((cmd + 7), var);
-	ft_strcpy((cmd + (7 + var_len)), value);
-	sh->ret = builtin_setenv(sh, cmd);
-	ft_strdel(&cmd);
-	return (sh->ret);
+	home = ft_strcpy(home, tmp);
+	ft_strcat(home, (dir + 1));
+	return (home);
 }

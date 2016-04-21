@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_update_cmd.c                                :+:      :+:    :+:   */
+/*   get_old_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibouchla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/04/13 21:30:32 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/04/13 21:30:36 by ibouchla         ###   ########.fr       */
+/*   Created: 2016/04/21 17:03:57 by ibouchla          #+#    #+#             */
+/*   Updated: 2016/04/21 17:04:14 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	create_update_cmd(t_shell *sh, char *var, char *value)
+char	*get_old_pwd(t_env *env, char *dir)
 {
-	size_t	var_len;
-	char	*cmd;
+	char	*tmp;
+	char	*home;
 
-	var_len = ft_strlen(var);
-	if ((cmd = ft_strnew(7 + (var_len + ft_strlen(value)))) == NULL)
+	if ((search_env_element(env, "OLDPWD=")) == FALSE
+	|| (tmp = get_value(env, "OLDPWD")) == NULL)
+	{
+		ft_strcolor_fd("cd: Old directory was not found.", H_RED, 2, TRUE);
+		return (NULL);
+	}
+	if ((home = ft_strnew(ft_strlen(tmp) + ft_strlen(dir))) == NULL)
 		ft_error_system();
-	cmd = ft_strcpy(cmd, "setenv ");
-	ft_strcpy((cmd + 7), var);
-	ft_strcpy((cmd + (7 + var_len)), value);
-	sh->ret = builtin_setenv(sh, cmd);
-	ft_strdel(&cmd);
-	return (sh->ret);
+	home = ft_strcpy(home, tmp);
+	ft_strcat(home, (dir + 1));
+	return (home);
 }
