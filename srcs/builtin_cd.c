@@ -15,18 +15,18 @@
 
 static int	check_is_directory(char *dir)
 {
-	DIR	*directory;
+	struct stat	st;
 
-	if ((directory = opendir(dir)) == NULL)
+	if ((stat(dir, &st)) != 0)
+	{
+		ft_strcolor_fd("stat call system has failed.", H_RED, 2, TRUE);
+		return (-1);
+	}
+	if (!S_ISDIR(st.st_mode))
 	{
 		ft_strcolor_fd("cd: ", H_RED, 2, FALSE);
 		ft_strcolor_fd(dir, H_WHITE, 2, FALSE);
 		ft_strcolor_fd(": Not a directory.", H_RED, 2, TRUE);
-		return (-1);
-	}
-	if ((closedir(directory)) == (-1))
-	{
-		ft_strcolor_fd("cd: Can't close directory.", H_RED, 2, TRUE);
 		return (-1);
 	}
 	return (0);

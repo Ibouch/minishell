@@ -14,7 +14,7 @@
 
 static void	run_prompt(int val)
 {
-	if (SIGINT == val)
+	if (SIGINT == val || val > 255)
 		write(1, "\n", 1);
 	ft_strcolor_fd("------------", B_BLACK, 1, TRUE);
 	ft_strcolor_fd("➤  ", ((val == 0) ? B_GREEN : B_RED), 1, FALSE);
