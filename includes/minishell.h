@@ -45,9 +45,10 @@ typedef struct		s_built
 {
 	char			*name;
 	t_exec_builtin	f_built;
+	t_bool			print_env;
 }					t_built;
 
-void				builtin_help(void);
+int					builtin_help(void);
 int					builtin_cd(t_shell *sh, char *cmd);
 int					builtin_setenv(t_shell *sh, char *cmd);
 int					builtin_unsetenv(t_shell *sh, char *cmd);
@@ -64,7 +65,7 @@ int					determine_prefixe(t_env *env, char **cmd);
 void				storage_all_cmds(t_shell *sh, char *cmd);
 void				storage_elem(char **str);
 void				remove_var_env(t_env **env, char *elem);
-void				print_setenv_usage(void);
+int					print_setenv_usage(void);
 int					print_environment(t_env *env);
 int					update_var_environment(t_shell *sh);
 int					create_update_cmd(t_shell *sh, char *var, char *value);
@@ -73,5 +74,7 @@ char				*get_value(t_env *env, char *elem);
 void				print_unknown_cmd(char *cmd);
 char				*get_home_directory(t_env *env, char *dir);
 void				check_old_dir(t_env *env, char **pattern);
+char				*isolate_name(char *pattern);
+void				storage_new_env(t_shell *sh, char *name, char *new);
 
 #endif

@@ -62,8 +62,6 @@ int				builtin_unsetenv(t_shell *sh, char *cmd)
 
 	i = 8;
 	sh->ret = 0;
-	if ((ft_strcmp(cmd, "unsetenv")) == 0)
-		return (print_environment(sh->env));
 	while ((ft_isspace(cmd[i])) == 1 && cmd[i] != '\0')
 		++i;
 	if ((elem = ft_strsub(cmd, i, (ft_strlen(cmd) - 8))) == NULL)

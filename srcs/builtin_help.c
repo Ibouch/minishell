@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-void	builtin_help(void)
+int	builtin_help(void)
 {
 	ft_strcolor_fd("\n\t\t~~~\t", B_RED, 1, FALSE);
 	ft_strcolor_fd("IB_SHELL HELP", B_WHITE, 1, FALSE);
@@ -35,4 +35,5 @@ value in its environment.", B_CYAN, 1, TRUE);
 	B_CYAN, 1, TRUE);
 	ft_strcolor_fd("\t\t*\t", B_RED, 1, FALSE);
 	ft_strcolor_fd("[EXIT]     : End a process.\n", B_CYAN, 1, TRUE);
+	return (0);
 }

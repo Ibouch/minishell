@@ -1,21 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_setenv_usage.c                               :+:      :+:    :+:   */
+/*   storage_new_env.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibouchla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/29 23:06:46 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/03/29 23:07:28 by ibouchla         ###   ########.fr       */
+/*   Created: 2016/04/22 19:53:50 by ibouchla          #+#    #+#             */
+/*   Updated: 2016/04/22 19:53:55 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	print_setenv_usage(void)
+void	storage_new_env(t_shell *sh, char *name, char *new)
 {
-	ft_strcolor_fd("\nIb_Shell: [setenv] error expected.", B_RED, 2, TRUE);
-	ft_strcolor_fd("Usage : ", B_BLUE, 2, FALSE);
-	ft_strcolor_fd("  $ setenv <VAR VALUE>\n", B_WHITE, 2, TRUE);
-	return (-1);
+	t_env	*begin;
+
+	begin = sh->env;
+	if ((search_env_element(sh->env, name)) == TRUE)
+	{
+		while (sh->env != NULL)
+		{
+			if ((ft_strncmp(sh->env->str, name, ft_strlen(name))) == 0)
+			{
+				ft_strdel(&(sh->env->str));
+				sh->env->str = new;
+				break ;
+			}
+			sh->env = sh->env->next;
+		}
+	}
+	else
+		env_addback(&(sh->env), new);
+	if (begin != NULL)
+		sh->env = begin;
 }

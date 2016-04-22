@@ -20,12 +20,12 @@ static void	convert_shlvl(t_shell *sh, char *sh_lvl)
 	while ((ft_isdigit(sh_lvl[i])) == 1 && sh_lvl[i] != '\0')
 		++i;
 	if (sh_lvl[i] != '\0')
-		create_update_cmd(sh, "SHLVL=", "1");
+		create_update_cmd(sh, "SHLVL ", "1");
 	else
 	{
 		i = ((ft_atoi(sh_lvl)) + 1);
 		sh_lvl = ft_itoa(i);
-		(sh_lvl != NULL) ? create_update_cmd(sh, "SHLVL=", sh_lvl) : (0);
+		(sh_lvl != NULL) ? create_update_cmd(sh, "SHLVL ", sh_lvl) : (0);
 	}
 }
 

@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_setenv_usage.c                               :+:      :+:    :+:   */
+/*   isolate_name.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibouchla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/29 23:06:46 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/03/29 23:07:28 by ibouchla         ###   ########.fr       */
+/*   Created: 2016/04/22 18:55:59 by ibouchla          #+#    #+#             */
+/*   Updated: 2016/04/22 18:56:02 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	print_setenv_usage(void)
+char	*isolate_name(char *pattern)
 {
-	ft_strcolor_fd("\nIb_Shell: [setenv] error expected.", B_RED, 2, TRUE);
-	ft_strcolor_fd("Usage : ", B_BLUE, 2, FALSE);
-	ft_strcolor_fd("  $ setenv <VAR VALUE>\n", B_WHITE, 2, TRUE);
-	return (-1);
+	int		i;
+	char	*name;
+
+	i = 0;
+	while (pattern[i] != '=' && pattern[i] != '\0')
+		++i;
+	i = (pattern[i] != '\0') ? ++i : i;
+	name = ft_strsub(pattern, 0, i);
+	if (name == NULL)
+		ft_error_system();
+	return (name);
 }

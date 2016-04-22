@@ -42,7 +42,9 @@ SRC_NAME =	builtin_help.c \
 			get_value.c \
 			print_unknown_cmd.c \
 			get_home_directory.c \
-			check_old_dir.c
+			check_old_dir.c \
+			isolate_name.c \
+			storage_new_env.c
 
 CC_FLAGS = clang -Wall -Wextra -Werror
 

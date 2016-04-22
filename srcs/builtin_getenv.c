@@ -83,8 +83,6 @@ int				builtin_getenv(t_shell *sh, char *cmd)
 
 	i = 6;
 	sh->ret = 0;
-	if ((ft_strcmp(cmd, "getenv")) == 0)
-		return (print_environment(sh->env));
 	while ((ft_isspace(cmd[i])) == 1 && cmd[i] != '\0')
 		++i;
 	if ((sh->elem = ft_strsub(cmd, i, (ft_strlen(cmd) - 6))) == NULL)

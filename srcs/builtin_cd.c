@@ -95,11 +95,12 @@ int			builtin_cd(t_shell *sh, char *cmd)
 	char	**arg;
 	int		i;
 
+	if ((ft_isspace(cmd[2])) == 0 && cmd[2] != '\0')
+		return (255);
 	i = 2;
 	while ((ft_isspace(cmd[i])) == 1 && cmd[i] != '\0')
 		++i;
-	if ((arg = ft_strsplit((cmd + i), ' ')) == NULL)
-		ft_error_system();
+	((arg = ft_strsplit((cmd + i), ' ')) == NULL) ? ft_error_system() : (0);
 	sh->ret = (-1);
 	if ((ft_size_tab(arg)) != 1)
 	{
@@ -110,8 +111,7 @@ int			builtin_cd(t_shell *sh, char *cmd)
 		ft_tabdel(arg);
 		return (sh->ret);
 	}
-	if ((ft_strncmp(arg[0], "-", 1)) == 0)
-		check_old_dir(sh->env, &(arg[0]));
+	((ft_strncmp(arg[0], "-", 1)) == 0) ? check_old_dir(sh->env, &(arg[0])) : 0;
 	sh->ret = ((ft_strncmp(arg[0], "~", 1)) == 0) ?
 	check_home_dir(sh, arg[0]) : go_change_dir(sh, arg[0]);
 	ft_tabdel(arg);

@@ -27,10 +27,10 @@ int			update_var_environment(t_shell *sh)
 	sh->ret = (-1);
 	if ((search_env_element(sh->env, "PWD=")) == TRUE)
 		if ((old_pwd = get_value(sh->env, "PWD")) != NULL)
-			sh->ret = create_update_cmd(sh, "OLDPWD=", old_pwd);
+			sh->ret = create_update_cmd(sh, "OLDPWD ", old_pwd);
 	if ((cwd = getcwd(buff, PATH_MAX + 1)) == NULL)
 		sh->ret = print_error_getcwd();
 	else
-		sh->ret = create_update_cmd(sh, "PWD=", cwd);
+		sh->ret = create_update_cmd(sh, "PWD ", cwd);
 	return (sh->ret);
 }

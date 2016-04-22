@@ -5,111 +5,92 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibouchla <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/29 16:36:00 by ibouchla          #+#    #+#             */
-/*   Updated: 2016/03/29 16:36:03 by ibouchla         ###   ########.fr       */
+/*   Created: 2016/04/22 15:52:59 by ibouchla          #+#    #+#             */
+/*   Updated: 2016/04/22 15:53:02 by ibouchla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static char	*get_new_env(char *tab[2])
-{
-	size_t	i;
-	char	*tmp;
-	char	*new_env;
-
-	if (tab[1] == NULL)
-		return (ft_strdup(tab[0]));
-	i = 0;
-	while (((ft_isspace(tab[1][i])) == 1 || tab[1][i] == '=')
-	&& tab[1][i] != '\0')
-		++i;
-	i = ((tab[1][i] == '\0') ? 0 : i);
-	tmp = ft_strsub(tab[1], i, ft_strlen(tab[1]) - i);
-	new_env = ft_strjoin(tab[0], tmp);
-	ft_strdel(&tmp);
-	if (new_env == NULL)
-		ft_error_system();
-	return (new_env);
-}
-
-static void	update_env(char **astr, char *tab[2])
+static char	*get_new_env(char **arg)
 {
 	char	*new;
+	size_t	len_value;
+	size_t	len_name;
 
-	ft_strdel(&(*astr));
-	if ((new = get_new_env(tab)) == NULL)
+	len_value = ((arg[1]) == NULL) ? 0 : ft_strlen(arg[1]);
+	len_name = ft_strlen(arg[0]);
+	new = ft_strnew((len_name + len_value) + 1);
+	if (new == NULL)
 		ft_error_system();
-	*astr = new;
+	new = ft_strcpy(new, arg[0]);
+	new[len_name] = '=';
+	if (arg[1] != NULL)
+		ft_strcat(new, arg[1]);
+	ft_tabdel(arg);
+	return (new);
 }
 
-static int	check_only_elem(char *str)
+static int	print_syntax_usage(void)
 {
-	size_t	len;
-	size_t	search;
+	ft_strcolor_fd("setenv: Variable name must contain alphanumeric characters."
+	, H_RED, 2, TRUE);
+	return (-1);
+}
 
-	len = ft_strlen(str);
-	search = ((len > 0) ? 1 : 0);
-	if (str[len - search] != '=')
+static int	check_syntax(char *s)
+{
+	int	i;
+
+	i = (-1);
+	while (s[++i] != '\0')
 	{
-		print_setenv_usage();
-		return (-1);
+		if ((ft_isalpha(s[i])) == 0)
+			return (print_syntax_usage());
 	}
 	return (0);
 }
 
-static int	storage_elem_value(char *tab[2], char *cmd)
+static int	storage_elem_value(char **arg)
 {
 	int		i;
 	char	*tmp;
 
-	i = 6;
-	while ((ft_isspace(cmd[i])) == 1 && cmd[i] != '\0')
-		++i;
-	if ((tmp = ft_strsub(cmd, i, (ft_strlen(cmd) - 6))) == NULL)
-		ft_error_system();
-	if (tmp[0] == '=')
-	{
-		print_setenv_usage();
-		ft_strdel(&tmp);
-		return (-1);
-	}
 	i = 0;
-	while (((ft_isspace(tmp[i])) == 0 && tmp[i] != '=') && tmp[i] != '\0')
-		++i;
-	i = ((ft_isspace(tmp[i])) == 1) ? --i : i;
-	tab[0] = ((tmp[i] == '\0') ? tmp : ft_strsub(tmp, 0, ++i));
-	tab[1] = ((tmp[i] == '\0') ? NULL : ft_strsub(tmp, i, ft_strlen(tmp) - i));
-	if ((ft_isspace(tmp[i])) == 1)
-		storage_elem(&tab[0]);
-	ft_strdel(&tmp);
+	if (arg[0] == NULL || ft_size_tab(arg) > 2)
+		return (print_setenv_usage());
+	if ((check_syntax(arg[0])) == (-1))
+		return (-1);
+	if (arg[1] != NULL)
+	{
+		while ((ft_isspace(arg[1][i])) == 1 && arg[1][i] != '\0')
+			++i;
+		((tmp = ft_strdup(arg[1] + i)) == NULL) ? ft_error_system() : (0);
+		ft_strdel(&(arg[1]));
+		arg[1] = tmp;
+	}
 	return (0);
 }
 
 int			builtin_setenv(t_shell *sh, char *cmd)
 {
-	char	*tab[2];
-	t_env	*begin;
+	int		i;
+	char	**arg;
+	char	*new;
+	char	*name;
 
-	if ((ft_strcmp(cmd, "setenv")) == 0)
-		return (print_environment(sh->env));
-	if ((storage_elem_value(tab, cmd)) == -1 || (check_only_elem(tab[0])) == -1)
+	i = 6;
+	while ((ft_isspace(cmd[i])) == 1 && cmd[i] != '\0')
+		++i;
+	((arg = ft_strsplit((cmd + i), ' ')) == NULL) ? ft_error_system() : (0);
+	if ((storage_elem_value(arg)) == (-1))
+	{
+		ft_tabdel(arg);
 		return (-1);
-	begin = sh->env;
-	if ((search_env_element(sh->env, tab[0])) == TRUE)
-		while (sh->env != NULL)
-		{
-			if ((ft_strncmp(sh->env->str, tab[0], ft_strlen(tab[0]))) == 0)
-			{
-				update_env(&(sh->env->str), tab);
-				break ;
-			}
-			sh->env = sh->env->next;
-		}
-	else
-		env_addback(&(sh->env), get_new_env(tab));
-	ft_strdel(&(tab[0]));
-	((tab[1] != NULL) ? ft_strdel(&(tab[1])) : (0));
-	((begin != NULL) ? sh->env = begin : (0));
+	}
+	new = get_new_env(arg);
+	name = isolate_name(new);
+	storage_new_env(sh, name, new);
+	ft_strdel(&name);
 	return (0);
 }

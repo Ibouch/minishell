@@ -36,12 +36,13 @@ int			builtin_exit(t_shell *sh, char *cmd)
 	char	*tmp;
 	char	**arg;
 
+	(cmd[4] == '\0') ? exit(EXIT_SUCCESS) : (0);
+	if ((ft_isspace(cmd[4])) == 0)
+		return (255);
 	if ((tmp = ft_strsub(cmd, 4, (ft_strlen(cmd) - 4))) == NULL)
 		ft_error_system();
 	((arg = ft_strsplit(tmp, ' ')) == NULL) ? ft_error_system() : (0);
 	ft_strdel(&tmp);
-	if (arg[0] == NULL)
-		exit(EXIT_SUCCESS);
 	if ((check_argument(arg)) == (-1))
 	{
 		ft_tabdel(arg);
