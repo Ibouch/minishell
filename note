@@ -1,0 +1,4 @@
+-.	Update la separation de ma commande
+	ex : cmd opt inconnue -> cmd unknown command or not found. et non pas cmd opt inconnus etc ...
+
+-. Bien penser a redonner les termcaps par default avant un execve. ex : ./21sh -> bash -> avoir termacps par default.

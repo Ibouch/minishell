@@ -49,7 +49,7 @@ void		run_shell(t_shell *sh)
 	{
 		start_shell(sh);
 		id = (-1);
-		while (sh->all_cmd[++id] != NULL)
+		while (sh->all_cmd[++id] != NULL && sh->all_cmd[id][0] != '\0')
 		{
 			if ((val = determine_builtins(sh, sh->all_cmd[id])) == 255)
 				if ((val = exec_bin(sh, sh->all_cmd[id])) == -1 || val == 255)
