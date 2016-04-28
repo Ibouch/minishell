@@ -2,3 +2,5 @@
 	ex : cmd opt inconnue -> cmd unknown command or not found. et non pas cmd opt inconnus etc ...
 
 -. Bien penser a redonner les termcaps par default avant un execve. ex : ./21sh -> bash -> avoir termacps par default.
+
+-. Regarder les possibilitees des temcaps notamment le ctrl L des que le signal est detecter tcgetstr("cl")
